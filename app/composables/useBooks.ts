@@ -6,17 +6,35 @@ export interface Book {
   description: string
 }
 
-// Placeholder data until the backend API is ready
-const books: Book[] = [
-  { id: 1, title: 'Clean Code', author: 'Robert C. Martin', price: 29.99, description: 'A handbook of agile software craftsmanship.' },
-  { id: 2, title: 'The Pragmatic Programmer', author: 'Andrew Hunt & David Thomas', price: 34.99, description: 'Your journey to mastery.' },
-  { id: 3, title: 'Eloquent JavaScript', author: 'Marijn Haverbeke', price: 24.99, description: 'A modern introduction to programming.' }
-]
+export type BookInput = Omit<Book, 'id'>
 
+// Backend ke /api/book endpoints (token useApi khud laga deta hai)
 export function useBooks() {
-  const getBooks = () => books
+  const api = useApi()
 
-  const getBookById = (id: number) => books.find(book => book.id === id)
+  const getBooks = async () => {
+    const { data } = await api.get<Book[]>('/book')
+    return data
+  }
 
-  return { getBooks, getBookById }
+  const getBookById = async (id: number) => {
+    const { data } = await api.get<Book>(`/book/${id}`)
+    return data
+  }
+
+  const createBook = async (payload: BookInput) => {
+    const { data } = await api.post<Book>('/book', payload)
+    return data
+  }
+
+  const updateBook = async (id: number, payload: BookInput) => {
+    const { data } = await api.put<Book>(`/book/${id}`, { id, ...payload })
+    return data
+  }
+
+  const deleteBook = async (id: number) => {
+    await api.delete(`/book/${id}`)
+  }
+
+  return { getBooks, getBookById, createBook, updateBook, deleteBook }
 }
