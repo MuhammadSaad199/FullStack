@@ -11,6 +11,6 @@ defineProps<{ book: Book }>()
   >
     <h3 class="mb-2 text-lg font-semibold">{{ book.title }}</h3>
     <p class="text-gray-600">{{ book.author }}</p>
-    <p class="mt-3 font-semibold">${{ book.price.toFixed(2) }}</p>
+    <p class="mt-3 font-semibold">${{ Number(book.price).toFixed(2) }}</p>
   </NuxtLink>
 </template>
