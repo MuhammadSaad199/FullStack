@@ -23,10 +23,17 @@ export const useAuth = () => {
     return res
   }
 
-  const logout = () => {
+  const logout = async () => {
+    // Backend ko batao (token abhi cookie mein hai, useApi khud laga deta hai)
+    try {
+      await api.post('/auth/logout')
+    } catch (e) {
+      // Backend fail ho (token expire/server band) tab bhi local logout karna hai
+      console.warn('Logout API failed:', e)
+    }
     token.value = null
     user.value = null
-    navigateTo('/login')
+    await navigateTo('/login')
   }
 
   const isLoggedIn = computed(() => !!token.value)
