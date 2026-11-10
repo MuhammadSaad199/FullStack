@@ -1,6 +1,6 @@
 export const useAuth = () => {
   const api = useApi()
-  const token = useCookie<string | null>('token', { maxAge: 60 * 60 })
+  const token = useCookie<string | null>('token', { maxAge: 2 * 60 })
   const user = useState<any>('user', () => null)
 
   const register = async (payload: {
